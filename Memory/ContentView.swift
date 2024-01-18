@@ -11,7 +11,7 @@ struct ContentView: View {
     
     var body: some View {
         HStack{
-            CardView(isTouched: true)
+            CardView()
             CardView()
             CardView()
             CardView()
@@ -24,20 +24,24 @@ struct ContentView: View {
 
 
 struct CardView: View{
-    var isTouched : Bool = false
+    @State var isTouched = false //type inference we dont have to specify the type
     var body: some View{
-        if(isTouched){
-            ZStack{
-                RoundedRectangle(cornerRadius: 10).foregroundColor(.white)
-                RoundedRectangle(cornerRadius: 10).strokeBorder(lineWidth: 2)
+        ZStack{
+            let base = RoundedRectangle(cornerRadius: 10) //type inference as roundedrectangle is a type of base that we didnt explicitly defined, swift does that for us
+            if(isTouched){
+                base.fill(.white)
+                base.strokeBorder(lineWidth: 2)
                 Text("👽").font(.largeTitle)
             }
-        } else {
-            ZStack{
-                RoundedRectangle(cornerRadius: 10)
+            else {
+                base.fill()
             }
         }
-
+        .onTapGesture { //this is a closure. trailing closure. last argument or only one argument to work. This is like a struct (ZStack) and this onTAPGesture is inline function exactly a closure
+//            isTouched = !isTouched can be done as
+            isTouched.toggle() //bool is a function in swift
+            
+        }
     }
 }
 
